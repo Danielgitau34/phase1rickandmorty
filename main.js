@@ -63,4 +63,11 @@ const createCharacterList = async () => {
 
 createCharacterList();
 
-const searchBtn = document.getElementById('')
+const findCharacter = async () => {
+	const inputValue = document.getElementById("seachInput").value;
+    const response = await fetch(`https://rickandmortyapi.com/api/character/?name=${inputValue}&status=alive`)
+    const jsonRes = await response.json()
+    console.log('res: ', jsonRes)
+};
+const searchBtn = document.getElementById("searchBtn");
+searchBtn.addEventListener("click", findCharacter);
