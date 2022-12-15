@@ -4,7 +4,7 @@
     align-items: center;
 }
 
-.characters {
+.characters, .search-results {
     margin-top: 100px;
 }
 .character {

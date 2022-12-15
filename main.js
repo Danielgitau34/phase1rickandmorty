@@ -72,7 +72,15 @@ const findCharacter = async () => {
 	const jsonRes = await response.json();
 	console.log(jsonRes);
 	const searchResults = document.querySelector(".search-results");
+    document.querySelector(".search-results").innerHTML = ""
 	createCharacterList(jsonRes.results, searchResults);
 };
 const searchBtn = document.getElementById("searchBtn");
 searchBtn.addEventListener("click", findCharacter);
+
+const clearSearch = document.querySelector("#clearSearch");
+clearSearch.addEventListener('click', () => {
+    console.log('clear called')
+    document.querySelector(".search-results").innerHTML = ""
+    document.getElementById("seachInput").value = ""
+})
