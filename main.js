@@ -11,13 +11,14 @@ const toggleMoreInformation = (id) => {
 	infoDiv.classList.toggle("active");
 };
 
-const createCharacterList = async () => {
+const createHomeage = async () => {
 	const characters = await getCharacters();
-	console.log("characters: ", characters);
-
 	const charactersContainer = document.querySelector(".characters");
+	createCharacterList(characters, charactersContainer);
+};
 
-	for (let i = 0; i < characters.length; i++) {
+const createCharacterList = async (data, container) => {
+	for (let i = 0; i < data.length; i++) {
 		const newDiv = document.createElement("div");
 		newDiv.classList.add("character");
 
@@ -27,9 +28,9 @@ const createCharacterList = async () => {
 		const title = document.createElement("h1");
 		const moreInfo = document.createElement("p");
 		moreInfo.addEventListener("click", () =>
-			toggleMoreInformation(characters[i].id)
+			toggleMoreInformation(`list-${data[i].id}`)
 		);
-		const information = `${characters[i].name}`;
+		const information = `${data[i].name}`;
 		title.innerHTML = information;
 		moreInfo.innerHTML = "More Info";
 		headingDiv.appendChild(title);
@@ -37,18 +38,18 @@ const createCharacterList = async () => {
 
 		const moreInfoDiv = document.createElement("div");
 		moreInfoDiv.classList.add("more-info");
-		moreInfoDiv.id = characters[i].id;
-		const imageSrc = characters[i].image;
+		moreInfoDiv.id = `list-${data[i].id}`;
+		const imageSrc = data[i].image;
 		const imageDiv = document.createElement("img");
 		imageDiv.src = imageSrc;
 		const gender = document.createElement("p");
 		const location = document.createElement("p");
 		const species = document.createElement("p");
 		const status = document.createElement("p");
-		gender.innerHTML = `Gender: ${characters[i].gender}`;
-		location.innerHTML = `Location: ${characters[i].location.name}`;
-		species.innerHTML = `Species: ${characters[i].species}`;
-		status.innerHTML = `Status: ${characters[i].status}`;
+		gender.innerHTML = `Gender: ${data[i].gender}`;
+		location.innerHTML = `Location: ${data[i].location.name}`;
+		species.innerHTML = `Species: ${data[i].species}`;
+		status.innerHTML = `Status: ${data[i].status}`;
 		moreInfoDiv.appendChild(imageDiv);
 		moreInfoDiv.appendChild(gender);
 		moreInfoDiv.appendChild(location);
@@ -57,17 +58,21 @@ const createCharacterList = async () => {
 
 		newDiv.appendChild(headingDiv);
 		newDiv.appendChild(moreInfoDiv);
-		charactersContainer.appendChild(newDiv);
+		container.appendChild(newDiv);
 	}
 };
 
-createCharacterList();
+createHomeage();
 
 const findCharacter = async () => {
 	const inputValue = document.getElementById("seachInput").value;
-    const response = await fetch(`https://rickandmortyapi.com/api/character/?name=${inputValue}&status=alive`)
-    const jsonRes = await response.json()
-    console.log('res: ', jsonRes)
+	const response = await fetch(
+		`https://rickandmortyapi.com/api/character/?name=${inputValue}&status=alive`
+	);
+	const jsonRes = await response.json();
+	console.log(jsonRes);
+	const searchResults = document.querySelector(".search-results");
+	createCharacterList(jsonRes.results, searchResults);
 };
 const searchBtn = document.getElementById("searchBtn");
 searchBtn.addEventListener("click", findCharacter);
